@@ -31,6 +31,7 @@ void fillNext(FILE *fp){
     
 }
 
+
 void addedge(char *nonterminal1, char** next1, char *nonterminal2, char** next2){
     nextdot += sprintf(nextdot, "%s_%p -> %s_%p\n", nonterminal1, next1, nonterminal2, next2);
 }
@@ -152,7 +153,7 @@ bool stmts2(){
 }
 bool stmts(){
     char **save = next;
-     char *dotsave = nextdot;
+    char *dotsave = nextdot;
     return (next = save,nextdot = dotsave,stmts1()) || (next = save,nextdot = dotsave,stmts2());
 }
 

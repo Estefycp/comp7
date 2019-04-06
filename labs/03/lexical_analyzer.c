@@ -1,18 +1,20 @@
 #include <stdio.h>
 
 #include <regex.h>        
-regex_t regex,regexi;
+regex_t regex,regexi,regexo;
 #define expression "[a-e]|[g-h]|[j-o]|[q-z]"
 #define num "[0-9]+"
+#define comment "\\/\\/.*\\n"  
 
 int main(int argc, char **argv){
     FILE *file;
     file = fopen(argv[1], "r");
     FILE *output;
     output = fopen("lex.out","w");
-    int status,status2;
+    int status,status2,status3;
     status = regcomp(&regex,expression,REG_EXTENDED|REG_NOSUB);
     status2 = regcomp(&regexi,num,REG_EXTENDED|REG_NOSUB);
+    status3 = regcomp(&regexo,comment,REG_EXTENDED|REG_NOSUB);
     char s[1];
   
     int c;
@@ -26,6 +28,9 @@ int main(int argc, char **argv){
         else if(c=='i'){
             fputs("intdcl",output);
         }
+	else if(!regexec(&regexo,s,(size_t)0,NULL,0)){
+	    fputs("comment",output);
+	}
         else if(c == '='){
             fputs("assign",output);
         }
@@ -35,7 +40,7 @@ int main(int argc, char **argv){
         else if (c == '-'){
             fputs("minus",output);
         }
-         else if (c == '+'){
+        else if (c == '+'){
             fputs("plus",output);
         }
         else if(!regexec(&regex,s,(size_t)0,NULL,0)){
